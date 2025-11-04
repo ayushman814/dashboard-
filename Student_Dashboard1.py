@@ -4,14 +4,14 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
-# Page configuration
+
 st.set_page_config(
     page_title="Student Performance Database",
     page_icon="📊",
     layout="wide"
 )
 
-# Custom CSS for better styling
+
 st.markdown("""
     <style>
     .main {
@@ -30,7 +30,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Load the actual CSV data
+
 @st.cache_data
 def load_student_data():
     # You need to upload the CSV file to the same directory as your script
@@ -41,7 +41,7 @@ def load_student_data():
     except:
         return None
 
-# File uploader option
+
 uploaded_file = st.file_uploader("Upload StudentsPerformance_Updated.csv", type=['csv'])
 
 if uploaded_file is not None:
@@ -50,15 +50,15 @@ else:
     df = load_student_data()
 
 if df is not None:
-    # Header
+    
     st.markdown("<h1>📊 Student Performance Database</h1>", unsafe_allow_html=True)
     st.markdown(f"**Analyzing {len(df)} student records - INPUT FILTERS & GET OUTPUT RESULTS**")
     st.markdown("---")
 
-    # INPUT SECTION
+   
     st.markdown("<h2>🔍 INPUT: Filters</h2>", unsafe_allow_html=True)
 
-    # Create filter columns
+   
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
@@ -96,7 +96,7 @@ if df is not None:
         
         study_hours_min = st.number_input("Study Hours Min", min_value=0.0, max_value=12.0, value=0.0, step=0.1)
 
-    # Score filters in expandable section
+    
     with st.expander("📝 Score Range Filters", expanded=False):
         col5, col6, col7 = st.columns(3)
         
@@ -122,13 +122,13 @@ if df is not None:
     with col9:
         avg_score_min = st.number_input("Avg Score Min", min_value=0.0, max_value=100.0, value=0.0, step=1.0)
 
-    # Reset button
+    
     if st.button("🔄 Reset All Filters", type="secondary"):
         st.rerun()
 
     st.markdown("---")
 
-    # Apply filters
+    
     filtered_df = df.copy()
 
     if gender_filter != 'All':
@@ -160,7 +160,7 @@ if df is not None:
         (filtered_df['avg_Score'] >= avg_score_min)
     ]
 
-    # OUTPUT SECTION
+    
     if len(filtered_df) > 0:
         st.markdown("<h2>📈 OUTPUT: Results</h2>", unsafe_allow_html=True)
         
@@ -199,7 +199,7 @@ if df is not None:
         
         st.markdown("---")
         
-        # Charts Section
+       
         tab1, tab2, tab3, tab4 = st.tabs(["📊 Score Analysis", "📈 Correlations", "🎯 Performance", "📚 Study Patterns"])
         
         with tab1:
@@ -369,10 +369,10 @@ if df is not None:
         
         st.markdown("---")
         
-        # Results Table
+       
         st.markdown(f"### 📋 All Student Records ({len(filtered_df)} total)")
         
-        # Display dataframe with better formatting
+        
         st.dataframe(
             filtered_df,
             use_container_width=True,
@@ -387,7 +387,7 @@ if df is not None:
             }
         )
         
-        # Download button
+       
         csv = filtered_df.to_csv(index=False)
         st.download_button(
             label="📥 Download Results as CSV",
@@ -396,7 +396,7 @@ if df is not None:
             mime="text/csv",
         )
         
-        # Correlation Analysis
+        
         st.markdown("---")
         st.markdown("### 🔗 Correlation Analysis")
         
@@ -417,7 +417,7 @@ if df is not None:
     else:
         st.error("❌ No students match your filter criteria. Please adjust your filters.")
 
-    # Footer
+    
     st.markdown("---")
     st.markdown("**💡 Key Features:**")
     st.markdown("""
@@ -430,4 +430,5 @@ if df is not None:
 
 else:
     st.error("⚠️ Please upload the StudentsPerformance_Updated.csv file to begin analysis.")
+
     st.info("Use the file uploader above to upload your CSV file.")
